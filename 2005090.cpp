@@ -64,6 +64,24 @@ public:
     bool premium_ticket;
 };
 
+// Function to generate a Poisson-distributed random number
+int get_random_number()
+{
+    // Creates a random device for non-deterministic random number generation
+    std::random_device rd;
+    // Initializes a random number generator using the random device
+    std::mt19937 generator(rd());
+
+    // Lambda value for the Poisson distribution
+    double lambda = 10000.234;
+
+    // Defines a Poisson distribution with the given lambda
+    std::poisson_distribution<int> poissonDist(lambda);
+
+    // Generates and returns a random number based on the Poisson distribution
+    return poissonDist(generator);
+}
+
 // Function for each visitor thread
 void *visitor_activities(void *arg)
 {
@@ -72,7 +90,9 @@ void *visitor_activities(void *arg)
     bool premium_ticket = v.premium_ticket;
 
     // Random delay before attempting to enter
-    usleep(rand() % 100000);
+    int randomNumber = get_random_number();
+    usleep(randomNumber % 100000);
+    safe_print("Ther random nummber is " + to_string(randomNumber));
 
     // Wait for the door
     safe_print("Student " + to_string(student_id) + " has arrived at A at " + to_string(get_time()));
