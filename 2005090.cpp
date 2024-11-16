@@ -116,37 +116,37 @@ void *visitor_activities(void *arg)
     safe_print("Visitor " + to_string(visitor_id) + " is at step 1 at timestamp " + to_string(get_time()));
     usleep(STEP_DELAY * SLEEP_MULTIPLIER);
 
-    pthread_mutex_lock(&step1_lock);   /// visitor can't leave first step if it cant reach the second step
-    pthread_mutex_unlock(&step0_lock); /// visitor is allowed to move to the second step, so he leaves the first
+    pthread_mutex_lock(&step1_lock); /// visitor can't leave first step if it cant reach the second step
 
     /// Now entering at step 2
 
     safe_print("Visitor " + to_string(visitor_id) + " is at step 2 at timestamp " + to_string(get_time()));
+    pthread_mutex_unlock(&step0_lock); /// visitor is allowed to move to the second step, so he leaves the first
     usleep(STEP_DELAY * SLEEP_MULTIPLIER);
 
-    pthread_mutex_lock(&step2_lock);   /// Visitor cant move to the third if it is not unlocked
-    pthread_mutex_unlock(&step1_lock); /// only after gaining access to the third step, visitor will leave
+    pthread_mutex_lock(&step2_lock); /// Visitor cant move to the third if it is not unlocked
 
     /// Now entering at step 3
 
     safe_print("Visitor " + to_string(visitor_id) + " is at step 3 at timestamp " + to_string(get_time()));
+    pthread_mutex_unlock(&step1_lock); /// only after gaining access to the third step, visitor will leave
     usleep(STEP_DELAY * SLEEP_MULTIPLIER);
 
     sem_wait(&gallery1_capacity);
-    pthread_mutex_unlock(&step2_lock);
 
     safe_print("Visitor " + to_string(visitor_id) + " is at C(Gallery 1) at timestamp " + to_string(get_time()));
+    pthread_mutex_unlock(&step2_lock);
     usleep(x * SLEEP_MULTIPLIER);
 
     sem_wait(&glass_corridor);
-    sem_post(&gallery1_capacity);
 
     safe_print("Visitor " + to_string(visitor_id) + " is at D(Glass Corridor) at timestamp " + to_string(get_time()));
+    sem_post(&gallery1_capacity);
     usleep(GLASS_CORRIDOR_SLEEP_TIME * SLEEP_MULTIPLIER);
 
+    safe_print("Visitor " + to_string(visitor_id) + " is at E(Gallery 2) at timestamp " + to_string(get_time()));
     sem_post(&glass_corridor); /// leaving the glass corridor
 
-    safe_print("Visitor " + to_string(visitor_id) + " is at E(Gallery 2) at timestamp " + to_string(get_time()));
     usleep(y * SLEEP_MULTIPLIER);
     safe_print("Visitor " + to_string(visitor_id) + " is about to enter the photo booth at timestamp " + to_string(get_time()));
 
@@ -171,7 +171,7 @@ void *visitor_activities(void *arg)
             pthread_mutex_unlock(&premium_ticket_holder_in_waiting_list);
         }
         pthread_mutex_unlock(&premium_ticket_count_lock);
-        
+
         pthread_mutex_unlock(&photo_booth_mutex);
     }
     else
@@ -211,7 +211,9 @@ int main()
     w = 2;
     x = 6;
     y = 6;
-    z = 3;
+    z = 12;
+    cin >> N >> M;
+    cin >> w >> x >> y >> z;
 
     int totalvisitors = N + M;
     pthread_t visitors[totalvisitors];
