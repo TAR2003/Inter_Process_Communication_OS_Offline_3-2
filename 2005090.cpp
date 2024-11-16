@@ -14,6 +14,7 @@ using namespace std;
 #define GALLERY1_CAPACITY 5
 #define GLASS_CORRIDOR_CAPACITY 3
 #define GLASS_CORRIDOR_SLEEP_TIME 10
+#define RANDOM_NUMBER_MULTIPLIER 100
 /// Semaphore to control the number of visitors in Gallery1
 sem_t gallery1_capacity;
 /// Semaphore to control the number of visitors in DE Glass Corridor
@@ -105,7 +106,7 @@ void *visitor_activities(void *arg)
 
     // Random delay before attempting to enter
     int randomNumber = get_random_number();
-    usleep(randomNumber * 100);
+    usleep(randomNumber * RANDOM_NUMBER_MULTIPLIER);
 
     // Wait for the door
     safe_print("Visitor " + to_string(visitor_id) + " has arrived at A at timestamp " + to_string(get_time()));
