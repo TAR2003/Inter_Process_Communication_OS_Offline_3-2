@@ -204,7 +204,7 @@ void *visitor_activities(void *arg)
     return NULL;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     int N, M;
     N = 10;
@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     x = 6;
     y = 6;
     z = 12;
-    if (argc != 7)
+    if(argc != 7) 
     {
         cout << "Please provide 6 inputs" << endl;
         exit(0);
@@ -224,8 +224,8 @@ int main(int argc, char *argv[])
     x = atoi(argv[4]);
     y = atoi(argv[5]);
     z = atoi(argv[6]);
-    // cin >> N >> M;
-    // cin >> w >> x >> y >> z;
+    //cin >> N >> M;
+   // cin >> w >> x >> y >> z;
 
     int totalvisitors = N + M;
     pthread_t visitors[totalvisitors];
